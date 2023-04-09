@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-kadd <hel-kadd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 20:38:24 by hel-kadd          #+#    #+#             */
-/*   Updated: 2023/04/08 21:07:59 by hel-kadd         ###   ########.fr       */
+/*   Updated: 2023/04/09 19:01:12 by abouzanb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #include <fcntl.h>
 #include <ctype.h>
 
-#include "/Users/hel-kadd/Desktop/lastversion/minishell/execution.h"
+#include "../../minishell/execution.h"
 
 typedef struct s_token {
     enum {

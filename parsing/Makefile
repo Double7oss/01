@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hel-kadd <hel-kadd@student.42.fr>          +#+  +:+       +#+         #
+#    By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/09 18:51:46 by hel-kadd          #+#    #+#              #
-#    Updated: 2023/04/08 21:32:51 by hel-kadd         ###   ########.fr        #
+#    Updated: 2023/04/09 20:16:50 by abouzanb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 CC = @cc
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
 
 # AR = @ar 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-kadd <hel-kadd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 17:32:59 by hel-kadd          #+#    #+#             */
-/*   Updated: 2023/04/08 22:56:58 by hel-kadd         ###   ########.fr       */
+/*   Updated: 2023/04/09 21:39:59 by abouzanb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,6 +334,8 @@ t_token *token_in_string(t_exeuction **cmd, t_token *token)
             token = token->next;
         }
     }
+    
+
     add_back_execution(cmd, initialize_execution(str, file));
     return token;
 }
@@ -405,6 +407,32 @@ int check_tokens(t_token *head) {
 }
 
 
+int check_redirect_tokens(t_token *token_list)
+{
+    t_token *current_token = token_list;
+    while (current_token != NULL) {
+        if ((current_token->type == TOKEN_RED_INFILE ||
+             current_token->type == TOKEN_RED_OUTFILE ||
+             current_token->type == TOKEN_APEND) &&
+            current_token->next != NULL &&
+            current_token->next->value != NULL &&
+            current_token->next->value[0] == '$' &&
+            current_token->next->value[1] != '\0') {
+
+            char *var_name = &(current_token->next->value[1]);
+            char *var_value = ft_getenv(var_name);
+
+            if (var_value == NULL || var_value[0] == '\0' ||
+                strchr(var_value, ' ') != NULL) {
+                ft_putstr_fd("mini: ambiguous redirect\n ", 2);
+                return (-1);
+            }
+        }
+
+        current_token = current_token->next;
+    }
+    return (0);
+}
 
 t_exeuction *filed_struct(char *input)
 {
@@ -413,21 +441,25 @@ t_exeuction *filed_struct(char *input)
     
     cmd = NULL;
     token = lexer(input);
+    if (check_tokens(token) == -1)
+        return NULL;
+   if (check_redirect_tokens(token) == -1)
+    return (NULL);
    token =  expand_dollar(&token);
     if (token == NULL)
         return NULL;
     // rm_db_quotes(&token);
     // rm_sng_quotes(&token);
-    if (check_tokens(token) == -1)
-        return NULL;
     while (token)
     {
        // printf("test\n");
         if (my_strcmp(token->value, "|") != 0)
+        {
             token = token_in_string(&cmd, token);
+        
+        }
         else
         {
-            // printf("token %s\n", token->value);
             token = token->next;
         }
     }
