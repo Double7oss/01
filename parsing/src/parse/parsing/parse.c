@@ -6,7 +6,7 @@
 /*   By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 17:32:59 by hel-kadd          #+#    #+#             */
-/*   Updated: 2023/04/09 21:39:59 by abouzanb         ###   ########.fr       */
+/*   Updated: 2023/04/09 21:41:58 by abouzanb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -425,6 +425,7 @@ int check_redirect_tokens(t_token *token_list)
             if (var_value == NULL || var_value[0] == '\0' ||
                 strchr(var_value, ' ') != NULL) {
                 ft_putstr_fd("mini: ambiguous redirect\n ", 2);
+                g_data.exit_status = 1;
                 return (-1);
             }
         }
