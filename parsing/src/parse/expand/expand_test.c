@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_test.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-kadd <hel-kadd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 02:30:45 by hel-kadd          #+#    #+#             */
-/*   Updated: 2023/04/09 00:38:35 by hel-kadd         ###   ########.fr       */
+/*   Updated: 2023/04/09 23:46:54 by abouzanb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,7 +263,7 @@ t_token *expand_dollar(t_token **token)
     temp = (*token);
     while (temp)
     {
-        if (here_doc || temp->type != TOKEN_SINGLE_QUOTE || temp->type != TOKEN_DOUBLE_QUOTE)
+        if (here_doc && temp->type != TOKEN_SINGLE_QUOTE && temp->type != TOKEN_DOUBLE_QUOTE)
         {
             temp->value = expand_do(temp->value);
             remove_double_quotes_inside_single_quotes(temp->value, 39);
@@ -272,7 +272,6 @@ t_token *expand_dollar(t_token **token)
         }
         if (temp->type == TOKEN_DOUBLE_QUOTE)
         {
-            printf("hsm\n");
             temp->value = expand_double(temp->value);
             
             // remove_single_quotes(temp->value);
