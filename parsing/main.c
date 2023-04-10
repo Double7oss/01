@@ -26,12 +26,37 @@ void print_str_array(char **arr) {
 			return (0);
 		}
 		 ptr  = filed_struct(str);
-		if (ptr == NULL)
-			continue;
+		// if (ptr->file == NULL)
 		 execution(ptr);
 		 add_history(str);
 		 dup2(fd[0], 0);
 		 dup2(fd[1], 1);
-		 free(str);
+		// t_token *token;
+		// t_file *file;
+		// token = NULL;
+		// token = lexer(str);
+		// t_exeuction *exec;
+		// exec = NULL;
+		// exec = filed_struct(str);
+		
+		// // exec = exec->next;
+		// // printf("fgdh\n");
+		// // print_str_array(exec->str);
+		
+		// file = exec->file;
+		// // while (token)
+		// // {
+		// // 	printf("token->value %s\n", token->value);
+		// // 	printf("token->type %u\n", token->type);
+		// // 	token = token->next;
+		// // }
+
+		// int j = 0;
+		// while (exec)
+		// {
+		// 	print_str_array(exec->str);
+		// 	printf(" j = %d\n",j);
+		// 	exec = exec->next;
+		// }
 	}
  }

@@ -3,87 +3,138 @@
 /*                                                        :::      ::::::::   */
 /*   expand_test.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hel-kadd <hel-kadd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 02:30:45 by hel-kadd          #+#    #+#             */
-/*   Updated: 2023/04/09 23:46:54 by abouzanb         ###   ########.fr       */
+/*   Updated: 2023/04/10 00:35:55 by hel-kadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
 
-void remove_quotes(char *str, char c)
-{
-    int i;
-    int j;
-    int inside_quotes = 0;
-    
-    i = 0;
-    j = 0;
-    while (str[i]) 
-    {
-        if (str[i] == '\"')
-        {
-            inside_quotes = !inside_quotes;
-        }
-        if (str[i] == c && !inside_quotes)
-        {
-            i++;
-            continue;
-        }
-        str[j++] = str[i++];
-    }
-    str[j] = '\0';
-}
 
-char *remove_single_quotes(char *str)
-{
-    char *new_str = malloc(strlen(str) + 1); // allocate memory for new string
-    int in_double_quotes = 0; // flag to track if current character is inside double quotes
-    int j = 0; // index for new string
-
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (str[i] == '"') {
-            in_double_quotes = !in_double_quotes; // toggle flag
-        } else if (str[i] == '\'' && !in_double_quotes) {
-            continue; // skip single quotes that are not inside double quotes
-        }
-        new_str[j++] = str[i];
-    }
-    new_str[j] = '\0'; // terminate new string with null character
-    return new_str;
-}
-
-
-void remove_double_quotes_inside_single_quotes(char *str, char c)
-{
-    int i;
-    int j;
+void remove_quotes23(char *str) {
+    int len = strlen(str);
+    int i = 0;
     int inside_single_quotes = 0;
     int inside_double_quotes = 0;
-    
-    i = 0;
-    j = 0;
-    while (str[i]) 
-    {
-        if (str[i] == '\'')
-        {
-            inside_single_quotes = !inside_single_quotes;
-        }
-        else if (str[i] == '\"' && !inside_single_quotes)
-        {
+
+    while (i < len) {
+        if (str[i] == '"' && !inside_single_quotes) {
             inside_double_quotes = !inside_double_quotes;
-        }
-        if (str[i] == c && !inside_single_quotes && !inside_double_quotes)
-        {
             i++;
-            continue;
+        } else if (str[i] == '\'' && !inside_double_quotes) {
+            inside_single_quotes = !inside_single_quotes;
+            i++;
+        } else if (str[i] == '"' && inside_single_quotes) {
+            i++;
+        } else if (str[i] == '\'' && inside_double_quotes) {
+            i++;
+        } else {
+            i++;
         }
-        str[j++] = str[i++];
+    }
+    int j = 0;
+    for (i = 0; i < len; i++) {
+        if (str[i] == '"' && !inside_single_quotes) {
+            inside_double_quotes = !inside_double_quotes;
+        } else if (str[i] == '\'' && !inside_double_quotes) {
+            inside_single_quotes = !inside_single_quotes;
+        } else if (str[i] == '"' && inside_single_quotes) {
+            str[j++] = '"';
+        } else if (str[i] == '\'' && inside_double_quotes) {
+            str[j++] = '\'';
+        } else {
+            str[j++] = str[i];
+        }
     }
     str[j] = '\0';
 }
+
+
+
+void handle_quotes(char *str) {
+    int len = strlen(str);
+    int i = 0;
+    int inside_quotes = 0;
+    char quote_type;
+    while (i < len) {
+        if ((str[i] == '\'' || str[i] == '\"') && !inside_quotes) {
+            inside_quotes = 1;
+            quote_type = str[i];
+            i++;
+        } else if (str[i] == quote_type && inside_quotes) {
+            inside_quotes = 0;
+            i++;
+        } else {
+            i++;
+        }
+    }
+}
+
+void remove_single_quotes(char *str) {
+    int len = strlen(str);
+    int i = 0;
+    int inside_double_quotes = 0;
+    while (i < len) {
+        if (str[i] == '"' && !inside_double_quotes) {
+            inside_double_quotes = 1;
+            i++;
+        } else if (str[i] == '"' && inside_double_quotes) {
+            inside_double_quotes = 0;
+            i++;
+        } else if (str[i] == '\'' && !inside_double_quotes) {
+            if (len > 1) {
+                int j;
+                for (j = i; j < len - 1; j++) {
+                    str[j] = str[j + 1];
+                }
+                str[len - 1] = '\0';
+                len--;
+            } else {
+                str[0] = '\0';
+                len = 0;
+            }
+        } else {
+            i++;
+        }
+    }
+    if (len > 0 && str[len - 1] == '\'') {
+        str[len - 1] = '\0';
+    }
+}
+
+
+void remove_double_quotes(char *str)
+{
+    int len = strlen(str);
+    int i = 0;
+    int inside_single_quotes = 0;
+    while (i < len) {
+        if (str[i] == '\'' && !inside_single_quotes) {
+            inside_single_quotes = 1;
+            i++;
+        } else if (str[i] == '\'' && inside_single_quotes) {
+            inside_single_quotes = 0;
+            i++;
+        } else if (str[i] == '\"' && !inside_single_quotes) {
+            int j;
+            for (j = i; j < len - 1; j++) {
+                str[j] = str[j + 1];
+            }
+            str[len - 1] = '\0';
+            len--;
+        } else {
+            i++;
+        }
+    }
+    if (len > 0 && str[len - 1] == '\"') {
+        str[len - 1] = '\0';
+    }
+}
+
+
 
 char	*expand_env(char	*dollar)
 {
@@ -92,7 +143,7 @@ char	*expand_env(char	*dollar)
 	char	*var_value;
 	char	*expanded = NULL;
 	if (dollar[j++] == '?')
-		expanded = ft_itoa(WEXITSTATUS(g_data.exit_status));
+		expanded = ft_itoa(g_data.exit_status);
 	else
 	{
 		while (dollar[j] && (dollar[j] == '_' || isdigit(dollar[j]) || isalpha(dollar[j])))
@@ -212,9 +263,11 @@ char *expand_double(char *str)
             double_quote += 1;
         if (str[i] == 39)
             single_quote += 1;
+        // printf("sq = %d\n dq = %d\n", single_quote, double_quote);
+        // printf("str[%d] = %c\n", i, str[i]);
         if (str[i] == '$' && double_quote % 2 != 0 )
         {
-            printf("test\n");
+            // printf("test\n");
              first = strndup(str, i);
             if (my_strcmp(str + i, "$") == 0)
                 sec = strdup(str + i);
@@ -237,7 +290,19 @@ char *expand_double(char *str)
     return (str);
 }
 
+int check_space(char *str)
+{
+    int i;
 
+    i = 0;
+    while (str && str[i])
+    {
+        if (str[i] == ' ')
+            return (0);
+        i++;
+    }
+    return (1);
+}
 
 
 
@@ -266,22 +331,22 @@ t_token *expand_dollar(t_token **token)
         if (here_doc && temp->type != TOKEN_SINGLE_QUOTE && temp->type != TOKEN_DOUBLE_QUOTE)
         {
             temp->value = expand_do(temp->value);
-            remove_double_quotes_inside_single_quotes(temp->value, 39);
-            remove_quote(temp->value, 34);
-            // remove_quotes(temp->value, 34);
+            remove_quotes23(temp->value);
+            // remove_single_quotes(temp->value);
+            // remove_double_quotes(temp->value);
         }
         if (temp->type == TOKEN_DOUBLE_QUOTE)
         {
             temp->value = expand_double(temp->value);
-            
+            remove_quotes23(temp->value);
             // remove_single_quotes(temp->value);
-            remove_quotes(temp->value, 34);
+            // remove_double_quotes(temp->value);
         }
         if (temp->type == TOKEN_SINGLE_QUOTE)
         {
-           expand_single(temp->value);
-           remove_single_quotes(temp->value);
-        //    remove_quote(temp->value, 39);
+            expand_single(temp->value);
+            remove_double_quotes(temp->value);
+            remove_single_quotes(temp->value);
         }
         if (temp->type == TOKEN_HERE_DOC)
             here_doc = 0;
