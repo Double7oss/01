@@ -6,12 +6,11 @@
 /*   By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 21:45:38 by abouzanb          #+#    #+#             */
-/*   Updated: 2023/04/06 02:01:39 by abouzanb         ###   ########.fr       */
+/*   Updated: 2023/04/11 18:06:41 by abouzanb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
-
 
 void	ft_putstr_fd(char *s, int fd)
 {
@@ -78,11 +77,12 @@ int	ft_atoi(const char *s)
 	return (x * type);
 }
 
-int check_name(char *str)
+int	check_name(char *str)
 {
-	int i;
+	int	i;
+
 	i = 0;
-	while (str[i])
+	while (str && str[i])
 	{
 		if (str[i] == '+' || str[i] == '=')
 			return (1);
@@ -90,6 +90,7 @@ int check_name(char *str)
 	}
 	return (0);
 }
+
 int check_if_it_isfirst(char *str)
 {
 	t_execute *ptr;
@@ -97,7 +98,6 @@ int check_if_it_isfirst(char *str)
 	plr = name_without_equal(g_data.str->name);
 	if (strcmp(str, plr) == 0)
 	{
-
 		ptr = g_data.str;
 		g_data.str = g_data.str->next;
 		free(ptr->name);
@@ -105,20 +105,22 @@ int check_if_it_isfirst(char *str)
 		free(ptr);
 		free(plr);
 		return (1);
-		
 	}
 	free(plr);
 	return (0);
 }
-void check_if_there_and_unset_it(char *str)
+
+void	check_if_there_and_unset_it(char *str)
 {
-	t_execute *ptr;
-	t_execute *temp;
-	t_va av;
+	t_execute	*ptr;
+	t_execute	*temp;
+	t_va		av;
 	
 
 	av.i = 0;
 	temp = g_data.str;
+	if (temp == NULL)
+		return ;
 	if (check_if_it_isfirst(str) == 1)
 		return;
 	while (temp)
@@ -138,9 +140,10 @@ void check_if_there_and_unset_it(char *str)
 		temp = temp->next;
 	}
 }
-void ft_unset(char **str)
+
+void	ft_unset(char **str)
 {
-	t_va va;
+	t_va	va;
 
 	va.i = 1;
 	if (ft_count(str) == 1)
@@ -157,16 +160,21 @@ void ft_unset(char **str)
 	}
 
 }
+void ft_put_error(char *str, char *str1, char *str2)
+{
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(str1, 2);
+	ft_putstr_fd(str2, 2);
+}
+
 void	handle_many_arguments(char *str)
 {
-	int i;
+	int	i;
 
 	i  =  ft_atoi(str);
 	if (i == -1)
 	{
-		ft_putstr_fd("exit\nmini: exit: ", 2);
-		ft_putstr_fd(str, 2);
-		ft_putstr_fd(": numeric argument requiredn\n", 2);
+		ft_put_error("exit\nmini: exit: ", str, ": numeric argument requiredn\n");
 		exit(255);
 	}
 	else
@@ -182,9 +190,7 @@ void	handle_one_arguments(char *str)
 	i  =  ft_atoi(str);
 	if (i == -1)
 	{
-		ft_putstr_fd("exit\nmini: exit: ", 2);
-		ft_putstr_fd(str, 2);
-		ft_putstr_fd(": numeric argument required\n", 2);
+		ft_put_error("exit\nmini: exit: ", str, ": numeric argument required\n");
 		exit(255);
 	}
 	else

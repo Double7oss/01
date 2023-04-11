@@ -6,7 +6,7 @@
 /*   By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 22:37:01 by abouzanb          #+#    #+#             */
-/*   Updated: 2023/04/11 01:27:37 by abouzanb         ###   ########.fr       */
+/*   Updated: 2023/04/11 20:50:39 by abouzanb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,15 @@ char	**get_env(void)
 	if (av.size == 0)
 		return (NULL);
 	env = ft_calloc((sizeof(char **) * av.size + 1), 1);
+	if (env == NULL)
+		return (NULL);
 	while (temp)
 	{
 		env[av.i] = my_strjoin(temp->name, temp->value);
 		temp = temp->next;
 		av.i++;
 	}
-	env[av.i] = NULL;
+//	env[av.i] = NULL;
+printf("%d|", av.i);
 	return (env);
 }

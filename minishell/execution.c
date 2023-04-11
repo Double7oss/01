@@ -6,17 +6,17 @@
 /*   By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 11:20:21 by abouzanb          #+#    #+#             */
-/*   Updated: 2023/04/10 22:34:06 by abouzanb         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:43:19 by abouzanb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-void free_node(t_exeuction *str)
+void	free_node(t_exeuction *str)
 {
-	t_file *file;
-	t_file *temp2;
-	
+	t_file	*file;
+	t_file	*temp2;
+
 	while (str)
 	{
 		file = str->file;
@@ -29,11 +29,11 @@ void free_node(t_exeuction *str)
 			free(temp2);
 		}
 		ft_free(str->str);
-	str = str->next;
+		str = str->next;
 	}
 }
 
-void check_the_path(t_exeuction *str, t_va *av, char **path)
+void	check_the_path(t_exeuction *str, t_va *av, char **path)
 {
 	int	i;
 
@@ -47,22 +47,29 @@ void check_the_path(t_exeuction *str, t_va *av, char **path)
 	}
 	av->comd = NULL;
 }
-void get_path(t_exeuction *str, t_va *av)
+
+int	ft_functioon_help_get_path(t_exeuction *str, t_va *av)
 {
-	t_execute	*tmp;
-	char		**path;
-
-
 	if ((access(str->str[0], X_OK) == 0))
 	{
 		av->comd = str->str[0];
-		return ;
+		return (1);
 	}
 	if (strchr(str->str[0], '/'))
 	{
 		av->comd = NULL;
-		return;
+		return (1);
 	}
+	return (0);
+}
+
+void	get_path(t_exeuction *str, t_va *av)
+{
+	t_execute	*tmp;
+	char		**path;
+
+	if (ft_functioon_help_get_path(str, av) == 1)
+		return ;
 	tmp = g_data.str;
 	if (tmp == NULL)
 	{
@@ -84,7 +91,7 @@ void get_path(t_exeuction *str, t_va *av)
 	check_the_path(str, av, path);
 }
 
-void execute_child(t_exeuction *str, t_va *va)
+void	execute_child(t_exeuction *str, t_va *va)
 {
 	handle_redir(str, va);
 	if (check_if_built(str) == 0)
@@ -101,9 +108,9 @@ void execute_child(t_exeuction *str, t_va *va)
 	exit(0);
 }
 
-void open_all(t_exeuction *str)
+void	open_all(t_exeuction *str)
 {
-	t_file *file;
+	t_file	*file;
 
 	while (str)
 	{
@@ -112,12 +119,13 @@ void open_all(t_exeuction *str)
 		{
 			if (file->type == 'H')
 				handle_here_doc(file);
-			file  = file->next;
+			file = file->next;
 		}
 		str = str->next;
 	}
 }
-void creates_childs(t_exeuction *str, t_va *va)
+
+void	creates_childs(t_exeuction *str, t_va *va)
 {
 	va->k = 0;
 	va->i = 0;
@@ -127,15 +135,13 @@ void creates_childs(t_exeuction *str, t_va *va)
 		va->id = fork();
 		if (va->id == -1)
 		{
-			ft_putstr_fd("mini-3.2$: fork: Resource temporarily unavailable\n", 2);
+			ft_putstr_fd("mini-3.2$: fork: Resource temporarily \
+				unavailable\n", 2);
 			g_data.exit_status = 0;
-			return;
+			return ;
 		}
 		if (va->id == 0)
-		{
-			
 			execute_child(str, va);
-		}
 		ft_close(va, str);
 		str = str->next;
 		(va->k)++;
@@ -148,34 +154,33 @@ void	simple(t_exeuction *str, t_va *av)
 		return ;
 	if (check_if_built(str) == 0)
 	{
-
 		av->id = fork();
 		if (av->id == 0)
-		{		
-		if (str->str[0][0] == '\0')
 		{
-			ft_putstr_fd("mini:  : command not found\n", 2);
-			exit(127);
-		}
+			if (str->str[0][0] == '\0')
+			{
+				ft_putstr_fd("mini:  : command not found\n", 2);
+				exit(127);
+			}
 			get_path(str, av);
 			if (av->comd == NULL)
 				error_print(1, str->str[0]);
 			av->env = get_env();
 			execve(av->comd, str->str, av->env);
-			perror("execve");
+			perror("mini: execve: ");
 			exit(1);
 		}
-		waitpid(av->id, &av->i,0 );
+		waitpid(av->id, &av->i, 0);
 		g_data.exit_status = WEXITSTATUS(av->i);
 		free_node(str);
 	}
 }
 
-void wait_for_them(t_va *va)
+void	wait_for_them(t_va *va)
 {
-	int i;
-	int status;
-	
+	int	i;
+	int	status;
+
 	i = 0;
 	while (i < va->size)
 	{
@@ -184,27 +189,28 @@ void wait_for_them(t_va *va)
 		i++;
 	}
 }
-void execution(t_exeuction *str)
-{
 
-	t_va *va = malloc(sizeof(t_va));	
-	va->size = ft_lstsize(str);
-	if (va->size == 0)
+void	execution(t_exeuction *str)
+{
+	t_va	va;
+
+	va.size = ft_lstsize(str);
+	if (va.size == 0)
 		return ;
-	if (va->size == 1)
+	if (va.size == 1)
 	{
 		open_all(str);
-		simple(str, va);
+		simple(str, &va);
 	}
 	else
 	{
-		va->fd = malloc(sizeof(int *) * va->size - 1);
-		init(va);
-		if (va->k == -1)
-			return;
-		creates_childs(str, va);
-		wait_for_them(va);
-		my_close(va);
+		va.fd = malloc(sizeof(int *) * va.size - 1);
+		init(&va);
+		if (va.k == -1)
+			return ;
+		creates_childs(str, &va);
+		wait_for_them(&va);
+		my_close(&va);
 		free_node(str);
 	}
 }

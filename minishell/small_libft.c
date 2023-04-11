@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   small_libft.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-kadd <hel-kadd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 21:36:28 by abouzanb          #+#    #+#             */
-/*   Updated: 2023/04/08 21:22:05 by hel-kadd         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:45:18 by abouzanb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*my_strjoin(char *str1, char *str2)
 		ptr[lenth] = str1[lenth];
 		lenth++;
 	}
-	while (str2&& str2[lenth2] != '\0')
+	while (str2 && str2[lenth2] != '\0')
 	{
 		ptr[lenth] = str2[lenth2];
 		lenth++;
@@ -65,8 +65,6 @@ char	*my_strjoin(char *str1, char *str2)
 	ptr[lenth] = '\0';
 	return (ptr);
 }
-
-
 
 char	*my_strchr(const char *str, int c)
 {
@@ -87,7 +85,6 @@ char	*my_strchr(const char *str, int c)
 	}
 	return (0);
 }
-
 
 int	ft_lstsize(t_exeuction *lst)
 {
