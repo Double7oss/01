@@ -3,22 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-kadd <hel-kadd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 11:20:21 by abouzanb          #+#    #+#             */
-/*   Updated: 2023/04/08 22:44:02 by hel-kadd         ###   ########.fr       */
+/*   Updated: 2023/04/10 22:34:06 by abouzanb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+void free_node(t_exeuction *str)
+{
+	t_file *file;
+	t_file *temp2;
+	
+	while (str)
+	{
+		file = str->file;
+		while (file)
+		{
+			free(file->name);
+			temp2 = file;
+			file = file->next;
+			temp2->next = NULL;
+			free(temp2);
+		}
+		ft_free(str->str);
+	str = str->next;
+	}
+}
 
 void check_the_path(t_exeuction *str, t_va *av, char **path)
 {
 	int	i;
 
 	i = 0;
-	dprintf(2, "%s\n", str->str[0]);
-	
 	while (path && path[i])
 	{
 		av->comd = my_strjoin(path[i], str->str[0]);
@@ -47,9 +66,8 @@ void get_path(t_exeuction *str, t_va *av)
 	tmp = g_data.str;
 	if (tmp == NULL)
 	{
-		av->cmd = NULL;
+		av->comd = NULL;
 		return ;
-
 	}
 	path = NULL;
 	while (tmp)
@@ -60,7 +78,7 @@ void get_path(t_exeuction *str, t_va *av)
 	}
 	if (path == NULL)
 	{
-		av->cmd = NULL;
+		av->comd = NULL;
 		return ;
 	}
 	check_the_path(str, av, path);
@@ -78,6 +96,7 @@ void execute_child(t_exeuction *str, t_va *va)
 		my_close(va);
 		execve(va->comd, str->str, va->env);
 		perror("execve");
+		exit(1);
 	}
 	exit(0);
 }
@@ -129,6 +148,7 @@ void	simple(t_exeuction *str, t_va *av)
 		return ;
 	if (check_if_built(str) == 0)
 	{
+
 		av->id = fork();
 		if (av->id == 0)
 		{		
@@ -142,9 +162,12 @@ void	simple(t_exeuction *str, t_va *av)
 				error_print(1, str->str[0]);
 			av->env = get_env();
 			execve(av->comd, str->str, av->env);
+			perror("execve");
+			exit(1);
 		}
 		waitpid(av->id, &av->i,0 );
 		g_data.exit_status = WEXITSTATUS(av->i);
+		free_node(str);
 	}
 }
 
@@ -163,6 +186,7 @@ void wait_for_them(t_va *va)
 }
 void execution(t_exeuction *str)
 {
+
 	t_va *va = malloc(sizeof(t_va));	
 	va->size = ft_lstsize(str);
 	if (va->size == 0)
@@ -181,5 +205,6 @@ void execution(t_exeuction *str)
 		creates_childs(str, va);
 		wait_for_them(va);
 		my_close(va);
+		free_node(str);
 	}
 }

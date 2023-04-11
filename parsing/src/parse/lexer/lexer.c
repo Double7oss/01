@@ -6,7 +6,7 @@
 /*   By: hel-kadd <hel-kadd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 19:21:09 by hel-kadd          #+#    #+#             */
-/*   Updated: 2023/04/09 20:45:40 by hel-kadd         ###   ########.fr       */
+/*   Updated: 2023/04/09 00:16:26 by hel-kadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,27 +70,10 @@ int lexer_redirection(t_token **token, int i, char *line)
 
 int lexer_is_word(t_token **token, char *input, int i, int s)
 {
-    int count;
-    int single;
     s = i;
     
-    count = 0;
-    single = 0;
-    while (input[i]) /*&& input[i] != 34*/
-    {
-        if (input[i] == 39 && count % 2 == 0)
-            single++;    
-        if (input[i] == 34 && single % 2 == 0)
-            count++;
-        if (is_special_char(input[i]) == 0 && count % 2 == 0)
-            break;
+    while (input[i] && (is_special_char(input[i]) != 0) /*&& input[i] != 34*/)
         i++;
-    }
-    if ((count % 2 != 0 && single % 2 == 0) || (count % 2 == 0 && single % 2 != 0))
-    {
-        printf("quotes not closed\n");
-        return(-1);
-    }
     // printf("i = %d\n", i);
     add_token(token, TOKEN_STR, input, i - s, s);
     return (i);
@@ -107,7 +90,20 @@ int double_quotes(t_token **token, char *input, int i, int s)
     // int size = i;
     // // int sq = 0;
     int x = 0;
-
+    // while (input[size])
+    // {
+    //     // printf("size = %d\n",size);
+    //     // if (input[size] == 39 && x % 2 == 0)
+    //     //     sq += 1;
+    //     if (input[size] == 34)
+    //         x++;
+    //     size++;
+    // }
+    // if (x % 2 != 0)
+    // {
+    //         printf("qutes not closed \n");
+    //         return (-1);
+    // }
     while (input[i] != '\0')
     {
         if (input[i] == 34)
@@ -119,13 +115,15 @@ int double_quotes(t_token **token, char *input, int i, int s)
             i++;
             break;
         }
-        if (input[i] == ' ' && count % 2 == 0 && x % 2 == 0)
+        if (input[i] == ' ' && count % 2 == 0)
         {
             break;
         }
+        // else if ((input[i] == ' ' && input[i + 1] != 34 && count == 2))
+        //     break ;
         i++;
     }
-        if ((count % 2 != 0 && x % 2 == 0) || (x % 2 != 0 && count % 2 == 0))
+        if (count % 2 != 0 || (x % 2 != 0 && count % 2 == 0))
     {
         printf("quotes not closed\n");
         return (-1);
@@ -221,11 +219,9 @@ t_token *lexer(char *input)
         if (is_charset(input[i]) != 0 && input[i] != 34 && input[i] != 39 && input[i] != ' ' && input[i] != '|' && input[i] != '<' && input[i] != '>' && input[i] != ';')
         {
             i = lexer_is_word(&head, input, i, s);
-            if (i == -1)
-                return NULL;
             s = i;
         }
-        else if (input[i] == 39)
+        if (input[i] == 39)
         {
             i = single_quotes(&head, input, i, s);
             if (i == -1)

@@ -6,7 +6,7 @@
 /*   By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 17:27:06 by abouzanb          #+#    #+#             */
-/*   Updated: 2023/04/06 00:47:01 by abouzanb         ###   ########.fr       */
+/*   Updated: 2023/04/09 18:33:01 by abouzanb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,20 @@ int	handle_redir_one_comand(t_exeuction *str)
 			if (file->type == 'H')
 				dup_here(file);
 			else if (file->type == 'I')
-				return (handle_input_for_one_comand(file));
+			{
+			if (handle_input_for_one_comand(file) == 1)
+				return (1);
+			}
 			else if (file->type == 'A')
-				return (handle_append_for_one_comand(file));
+			{
+				if (handle_append_for_one_comand(file) == 1)
+					return  (1);
+			}
 			else if (file->type == 'O')
-				return (handle_output_for_one_comand(file));
+			{
+			if (handle_output_for_one_comand(file) == 1)
+				return (1);
+			}
 		}
 		file = file->next;
 	}

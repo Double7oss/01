@@ -6,7 +6,7 @@
 /*   By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 22:37:01 by abouzanb          #+#    #+#             */
-/*   Updated: 2023/04/06 02:29:14 by abouzanb         ###   ########.fr       */
+/*   Updated: 2023/04/11 00:39:22 by abouzanb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,13 @@ char	**get_env(void)
 	av.size = my_lstsize(g_data.str);
 	if (av.size == 0)
 		return (NULL);
-	env = ft_calloc((sizeof(char **) * av.size), 1);
+	env = ft_calloc((sizeof(char **) * av.size + 1), 1);
 	while (temp)
 	{
 		env[av.i] = my_strjoin(temp->name, temp->value);
 		temp = temp->next;
 		av.i++;
 	}
+	env[av.i] = NULL;
 	return (env);
 }

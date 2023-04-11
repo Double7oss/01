@@ -30,9 +30,9 @@ int	is_valid(char *str)
 		}
 		if (ft_isdigit(str[0]) == 1 || str[0] == '=')
 		{
-            ft_putstr_fd("bash: export: `",2 );
-            ft_putstr_fd(str, 2);
-            ft_putstr_fd("': not a valid identifier\n", 2);
+			ft_putstr_fd("bash: export: `",2 );
+			ft_putstr_fd(str, 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
 			g_data.exit_status = 1;
 			return (0);
 		}
@@ -44,21 +44,21 @@ int	is_valid(char *str)
 			{
 				if (str[i + 1]!= '=')
 				{
-                    ft_putstr_fd("bash: export: `",2 );
-                    ft_putstr_fd(str, 2);
-                    ft_putstr_fd("': not a valid identifier\n", 2);
+					ft_putstr_fd("bash: export: `",2 );
+					ft_putstr_fd(str, 2);
+					ft_putstr_fd("': not a valid identifier\n", 2);
 					g_data.exit_status = 1;
 					return (1);
 				}
 			}
 			if (ft_isalnum(str[i]) == 0 && str[i] != '+')
-            {
-                ft_putstr_fd("bash: export: `",2 );
-                ft_putstr_fd(str, 2);
-                ft_putstr_fd("': not a valid identifier\n", 2);
+			{
+				ft_putstr_fd("bash: export: `",2 );
+				ft_putstr_fd(str, 2);
+				ft_putstr_fd("': not a valid identifier\n", 2);
 				return (0);
-            }
-            i++;
+			}
+			i++;
 		}
 	return (1);
 }
@@ -128,14 +128,11 @@ void add_to_export(char **cmd)
 	while (cmd[i])
 	{	
 		if (is_valid(cmd[i]) != 0)
-            add_to_exp(cmd[i]);
+			add_to_exp(cmd[i]);
 		i++;
 	}
 }
-
-
-
-
+ 
 int update(char *str)
 {
 	t_execute *s;
