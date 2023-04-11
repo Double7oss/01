@@ -6,7 +6,7 @@
 /*   By: hel-kadd <hel-kadd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 17:32:59 by hel-kadd          #+#    #+#             */
-/*   Updated: 2023/04/11 19:49:55 by hel-kadd         ###   ########.fr       */
+/*   Updated: 2023/04/11 20:23:26 by hel-kadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -440,7 +440,7 @@ t_exeuction *filed_struct(char *input)
     cmd = NULL;
     token = lexer(input);
     // print_token(&token);
-    // token =  expand_dollar(&token);
+    token =  expand_dollar(&token);
     if (token == NULL)
         return NULL;
     if (check_redirect_tokens(token) == -1)
