@@ -6,7 +6,7 @@
 /*   By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 18:04:45 by hel-kadd          #+#    #+#             */
-/*   Updated: 2023/04/10 21:42:56 by abouzanb         ###   ########.fr       */
+/*   Updated: 2023/04/03 18:50:43 by abouzanb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,9 @@ t_file *initialize_redirection(char *filename, char type)
 t_exeuction *initialize_execution(char **str, t_file *file)
 {
 	t_exeuction *cmd;
-	// if (!str)
-	// 	return (NULL);
+	
+	if (!str)
+		return (NULL);
 	cmd = (t_exeuction *)malloc(sizeof(t_exeuction));
 	if (!cmd)
 		return (NULL);

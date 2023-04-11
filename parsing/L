@@ -1,8 +1,0 @@
-L
-Makefile
-homebrew
-include
-main.c
-main.o
-minishell
-src
