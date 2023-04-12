@@ -6,7 +6,7 @@
 /*   By: hel-kadd <hel-kadd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 02:30:45 by hel-kadd          #+#    #+#             */
-/*   Updated: 2023/04/11 20:24:10 by hel-kadd         ###   ########.fr       */
+/*   Updated: 2023/04/12 00:37:57 by hel-kadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ char *expand_single(char *str)
             single_quote += 1;
         else if (str[i] == 34 && single_quote % 2 == 0)
             double_quote += 1;
-        if (str[i] == '$' && single_quote % 2 == 0)
+        if (str[i] == '$' && single_quote % 2 == 0 && double_quote % 2 != 0)
         {
             first = ft_strndup(str, i);
             if (my_strcmp(str + i, "$") == 0)
@@ -344,10 +344,8 @@ t_token *expand_dollar(t_token **token)
         }
         if (temp->type == TOKEN_SINGLE_QUOTE)
         {
-            // printf("value of single quotes type = [%s]\n", temp->value);
-            temp->value = expand_sq(temp->value);
-            remove_double_quotes(temp->value);
-            remove_single_quotes(temp->value);
+            temp->value = expand_do(temp->value);
+            remove_quotes23(temp->value);
         }
         if (temp->type == TOKEN_HERE_DOC)
             here_doc = 0;

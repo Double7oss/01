@@ -6,7 +6,7 @@
 /*   By: hel-kadd <hel-kadd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 19:21:09 by hel-kadd          #+#    #+#             */
-/*   Updated: 2023/04/11 19:54:40 by hel-kadd         ###   ########.fr       */
+/*   Updated: 2023/04/12 00:30:16 by hel-kadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,26 +108,9 @@ int	double_quotes(t_token **token, char *input, int i, int s)
 	i += 1;
 	count = 1;
 	x = 0;
-	while (input[i] != '\0')
-	{
-		if (input[i] == 34)
-			count++;
-		if (input[i] == 39 && count % 2 == 0)
-			x++;
-		if ((input[i] == 34 && input[i + 1] == ' '))
-		{
-			i++;
-			break ;
-		}
-		if (input[i] == ' ' && count % 2 == 0 && x % 2 == 0)
-			break ;
-		i++;
-	}
-	if ((count % 2 != 0 && x % 2 == 0) || (x % 2 != 0 && count % 2 == 0))
-	{
-		printf("quotes not closed\n");
+	i = db_condition(input, i, count, x);
+	if (i == -1)
 		return (-1);
-	}
 	ft_add_back_token(token,
 		initialize_tokens(ft_strndup(input + s, i - s), TOKEN_DOUBLE_QUOTE));
 	return (i);
@@ -142,26 +125,9 @@ int	single_quotes(t_token **token, char *input, int i, int s)
 	count = 1;
 	i += 1;
 	x = 0;
-	while (input[i] != '\0')
-	{
-		if (input[i] == 34 && count % 2 == 0)
-			x++;
-		if (input[i] == 39)
-			count++;
-		if (input[i] == 39 && (input[i + 1] == ' '))
-		{
-			i++;
-			break ;
-		}
-		if (input[i] == ' ' && count % 2 == 0 && x % 2 == 0)
-			break ;
-		i++;
-	}
-	if (count % 2 != 0 || (x % 2 != 0 && count % 2 == 0))
-	{
-		printf("quotes not closed\n");
+	i = sq_condition(input, i, count, x);
+	if (i == -1)
 		return (-1);
-	}
 	ft_add_back_token(token,
 		initialize_tokens(ft_strndup(input + s, i - s), TOKEN_SINGLE_QUOTE));
 	return (i);

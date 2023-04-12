@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abouzanb <abouzanb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hel-kadd <hel-kadd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 20:38:24 by hel-kadd          #+#    #+#             */
-/*   Updated: 2023/04/11 20:51:05 by abouzanb         ###   ########.fr       */
+/*   Updated: 2023/04/12 00:28:25 by hel-kadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,4 +102,7 @@ void rm_db_quotes(t_token **head);
 char	*ft_itoa(int a);
 int my_strcmp(const char *s1, const char *s2);
 void remove_quote(char *str, char c);
+//quotes Utils functions
+int db_condition(char *input, int i, int count, int x);
+int sq_condition(char *input, int i, int count, int x);
 #endif

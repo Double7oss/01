@@ -6,7 +6,7 @@
 #    By: hel-kadd <hel-kadd@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/09 18:51:46 by hel-kadd          #+#    #+#              #
-#    Updated: 2023/04/08 21:32:51 by hel-kadd         ###   ########.fr        #
+#    Updated: 2023/04/12 00:26:15 by hel-kadd         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
 
 SRCS =	./src/parse/lexer/lexer.c \
 		./src/parse/lexer/lexer_utils.c \
+		./src/parse/lexer/lexer_quotes_utils.c \
 		./src/parse/utils/ft_utils.c \
 		./src/parse/utils/ft_str_func.c \
 		./src/parse/parsing/parse.c \
